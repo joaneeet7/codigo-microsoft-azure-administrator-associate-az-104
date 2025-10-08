@@ -1,13 +1,13 @@
-# create-vm-2025.ps1
+# create-vm.ps1
 
 # Configuration variables
 $resourceGroup = "MyResourceGroup"
 $location = "westeurope"
 $vmName = "MyVM"
-$image = "Win2025Datacenter"
+$image = "Win2022Datacenter"
 $size = "Standard_B1s"
-$username = "azureuser"
-$password = ConvertTo-SecureString "MySecurePassword2025!" -AsPlainText -Force
+$username = "joanamengual"
+$password = ConvertTo-SecureString "SecurePassword!" -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential($username, $password)
 
 # Login to Azure
@@ -28,4 +28,4 @@ New-AzVM `
   -Credential $credential `
   -OpenPorts 3389
 
-Write-Host "Virtual machine '$vmName' created successfully in region $location."
+Write-Host "✅ Virtual machine '$vmName' created successfully in region $location with user '$username'."

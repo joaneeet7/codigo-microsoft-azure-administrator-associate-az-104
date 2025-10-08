@@ -1,8 +1,12 @@
+$username = "joanamengual"
+$password = ConvertTo-SecureString "SecurePassword2025!" -AsPlainText -Force
+$credential = New-Object System.Management.Automation.PSCredential($username, $password)
+
 New-AzVM `
   -ResourceGroupName "MyResourceGroup" `
   -Name "MyVM" `
   -Location "westeurope" `
-  -Image "Win2025Datacenter" `
+  -Image "Win2022Datacenter" `
   -Size "Standard_B1s" `
-  -Credential (Get-Credential) `
+  -Credential $credential `
   -OpenPorts 3389
