@@ -1,5 +1,5 @@
 $adminUser = "joanamengual"
-$adminPassword = ConvertTo-SecureString "SecurePassword2025!" -AsPlainText -Force
+$adminPassword = ConvertTo-SecureString "SecurePassword!" -AsPlainText -Force
 $location = "westeurope"
 $resourceGroup = "MyResourceGroup"
 $computerName = "MyVM"
