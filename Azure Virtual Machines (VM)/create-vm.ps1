@@ -1,31 +1,59 @@
 # create-vm.ps1
 
-# Configuration variables
-$resourceGroup = "MyResourceGroup"
+# Configuration
+$adminUsername = "joanamengual"
+$adminPassword = ConvertTo-SecureString "SecurePassword!" -AsPlainText -Force
 $location = "westeurope"
+$resourceGroup = "MyResourceGroup"
+$computerName = "MyVM"
 $vmName = "MyVM"
-$image = "Win2022Datacenter"
-$size = "Standard_B1s"
-$username = "joanamengual"
-$password = ConvertTo-SecureString "SecurePassword!" -AsPlainText -Force
-$credential = New-Object System.Management.Automation.PSCredential($username, $password)
+$vmSize = "Standard_B1s"
 
-# Login to Azure
-Connect-AzAccount
+# Network configuration
+$virtualNetworkName = "MyVNet"
+$subnetName = "MySubnet"
+$nicName = "MyNIC"
+$subnetPrefix = "10.0.2.0/24"
+$vnetPrefix = "10.0.0.0/16"
 
-# Create resource group if it doesn't exist
-if (-not (Get-AzResourceGroup -Name $resourceGroup -ErrorAction SilentlyContinue)) {
-    New-AzResourceGroup -Name $resourceGroup -Location $location
-}
+# Create subnet config
+$subnetConfig = New-AzVirtualNetworkSubnetConfig -Name $subnetName -AddressPrefix $subnetPrefix
+
+# Create virtual network
+$vnet = New-AzVirtualNetwork -Name $virtualNetworkName `
+  -ResourceGroupName $resourceGroup `
+  -Location $location `
+  -AddressPrefix $vnetPrefix `
+  -Subnet $subnetConfig
+
+# Create network interface
+$nic = New-AzNetworkInterface -Name $nicName `
+  -ResourceGroupName $resourceGroup `
+  -Location $location `
+  -SubnetId $vnet.Subnets[0].Id
+
+# Create credentials
+$credentials = New-Object System.Management.Automation.PSCredential ($adminUsername, $adminPassword)
+
+# VM configuration
+$vmConfig = New-AzVMConfig -VMName $vmName -VMSize $vmSize
+
+$vmConfig = Set-AzVMOperatingSystem -VM $vmConfig -Windows `
+  -ComputerName $computerName `
+  -Credential $credentials `
+  -ProvisionVMAgent -EnableAutoUpdate
+
+$vmConfig = Add-AzVMNetworkInterface -VM $vmConfig -Id $nic.Id
+
+$vmConfig = Set-AzVMSourceImage -VM $vmConfig `
+  -PublisherName "MicrosoftWindowsServer" `
+  -Offer "WindowsServer" `
+  -Skus "2022-datacenter-azure-edition-core" `
+  -Version "latest"
 
 # Create the virtual machine
 New-AzVM `
   -ResourceGroupName $resourceGroup `
-  -Name $vmName `
   -Location $location `
-  -Image $image `
-  -Size $size `
-  -Credential $credential `
-  -OpenPorts 3389
-
-Write-Host "✅ Virtual machine '$vmName' created successfully in region $location with user '$username'."
+  -VM $vmConfig `
+  -Verbose
