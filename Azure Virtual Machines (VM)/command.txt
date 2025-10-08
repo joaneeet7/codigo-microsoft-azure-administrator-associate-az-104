@@ -1,0 +1,8 @@
+New-AzVM `
+  -ResourceGroupName "MyResourceGroup" `
+  -Name "MyVM2025" `
+  -Location "westeurope" `
+  -Image "Win2022Datacenter" `
+  -Size "Standard_B1s" `
+  -Credential (Get-Credential) `
+  -OpenPorts 3389
