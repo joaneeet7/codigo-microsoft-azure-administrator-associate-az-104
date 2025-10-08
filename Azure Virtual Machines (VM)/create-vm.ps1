@@ -3,7 +3,7 @@
 # Configuration variables
 $resourceGroup = "MyResourceGroup"
 $location = "westeurope"
-$vmName = "MyVM2025"
+$vmName = "MyVM"
 $image = "Win2025Datacenter"
 $size = "Standard_B1s"
 $username = "azureuser"
@@ -28,4 +28,4 @@ New-AzVM `
   -Credential $credential `
   -OpenPorts 3389
 
-Write-Host "✅ Virtual machine '$vmName' created successfully in region $location."
+Write-Host "Virtual machine '$vmName' created successfully in region $location."
