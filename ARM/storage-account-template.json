@@ -1,0 +1,128 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "description": "Plantilla ARM simple para crear una Storage Account en Azure"
+  },
+  "parameters": {
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Nombre único de la Storage Account (solo minúsculas y números)"
+      },
+      "minLength": 3,
+      "maxLength": 24
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Ubicación de los recursos (por defecto la del Resource Group)"
+      }
+    },
+    "sku": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_ZRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "Tipo de replicación de almacenamiento"
+      }
+    },
+    "kind": {
+      "type": "string",
+      "defaultValue": "StorageV2",
+      "allowedValues": [
+        "Storage",
+        "StorageV2",
+        "BlobStorage"
+      ],
+      "metadata": {
+        "description": "Tipo de Storage Account"
+      }
+    },
+    "accessTier": {
+      "type": "string",
+      "defaultValue": "Hot",
+      "allowedValues": [
+        "Hot",
+        "Cool"
+      ],
+      "metadata": {
+        "description": "Nivel de acceso para datos blob"
+      }
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {
+        "Environment": "Demo",
+        "Department": "IT",
+        "Purpose": "Training"
+      },
+      "metadata": {
+        "description": "Tags para organizar recursos"
+      }
+    }
+  },
+  "variables": {
+    "storageAccountNameClean": "[toLower(parameters('storageAccountName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2023-01-01",
+      "name": "[variables('storageAccountNameClean')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('sku')]"
+      },
+      "kind": "[parameters('kind')]",
+      "properties": {
+        "accessTier": "[parameters('accessTier')]",
+        "supportsHttpsTrafficOnly": true,
+        "minimumTlsVersion": "TLS1_2",
+        "allowBlobPublicAccess": false,
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            },
+            "file": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      },
+      "tags": "[parameters('tags')]"
+    }
+  ],
+  "outputs": {
+    "storageAccountName": {
+      "type": "string",
+      "value": "[variables('storageAccountNameClean')]",
+      "metadata": {
+        "description": "Nombre de la Storage Account creada"
+      }
+    },
+    "storageAccountId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountNameClean'))]",
+      "metadata": {
+        "description": "ID del recurso de la Storage Account"
+      }
+    },
+    "primaryEndpoints": {
+      "type": "object",
+      "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountNameClean'))).primaryEndpoints]",
+      "metadata": {
+        "description": "Endpoints primarios de la Storage Account"
+      }
+    }
+  }
+}
+
