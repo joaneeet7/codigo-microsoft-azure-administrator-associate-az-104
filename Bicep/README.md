@@ -4,8 +4,7 @@ Para tu clase de demostración, usa estos archivos:
 
 ## Archivos
 
-- **storage-account.bicep** - Template Bicep minimalista (15 líneas)
-- **storage-account.bicepparam** - Parámetros
+- **storage-account.bicep** - Template Bicep autosuficiente (16 líneas)
 - **deploy.sh** - Script de despliegue
 
 ## Uso rápido
@@ -27,8 +26,7 @@ az group create --name rg-demo-bicep --location westeurope
 # Desplegar
 az deployment group create \
   --resource-group rg-demo-bicep \
-  --template-file storage-account.bicep \
-  --parameters storage-account.bicepparam
+  --template-file storage-account.bicep
 
 # Ver recursos creados
 az resource list --resource-group rg-demo-bicep --output table
@@ -40,11 +38,11 @@ az group delete --name rg-demo-bicep --yes
 ## Conceptos clave
 
 **storage-account.bicep** muestra:
-- Declaración de parámetros
+- Parámetros con valores por defecto
 - Creación de un recurso
 - Outputs básicos
 
-**15 líneas de código** vs 130 en ARM JSON - Bicep es mucho más limpio.
+**16 líneas de código** vs 130 en ARM JSON - Bicep es mucho más limpio.
 
 ## Ejercicio
 
@@ -62,14 +60,11 @@ az bicep build --file storage-account.bicep
 # Ver el JSON sin guardarlo
 az bicep build --file storage-account.bicep --stdout
 
+# Descompilar ARM JSON a Bicep
+az bicep decompile --file storage-account.json
+
 # Validar antes de desplegar
 az deployment group validate \
   --resource-group rg-demo-bicep \
-  --template-file storage-account.bicep \
-  --parameters storage-account.bicepparam
+  --template-file storage-account.bicep
 ```
-
----
-
-Este ejemplo demuestra los conceptos fundamentales de Bicep para Infrastructure as Code en Azure.
-

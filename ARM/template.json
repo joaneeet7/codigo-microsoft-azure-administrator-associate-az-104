@@ -7,8 +7,9 @@
   "parameters": {
     "storageAccountName": {
       "type": "string",
+      "defaultValue": "[concat('stdemo', uniqueString(resourceGroup().id))]",
       "metadata": {
-        "description": "Nombre único de la Storage Account (solo minúsculas y números)"
+        "description": "Nombre único de la Storage Account (generado automáticamente si no se especifica)"
       },
       "minLength": 3,
       "maxLength": 24

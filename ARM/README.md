@@ -4,8 +4,7 @@ Ejemplo de ARM (Azure Resource Manager) Template para crear una Storage Account.
 
 ## Archivos
 
-- **storage-account-template.json** - Plantilla ARM principal
-- **parameters.json** - Parámetros de configuración
+- **storage-account-template.json** - Plantilla ARM principal (autosuficiente)
 - **deploy.ps1** - Script PowerShell
 - **deploy.sh** - Script Bash
 
@@ -30,14 +29,12 @@ az group create \
 # Validar template
 az deployment group validate \
     --resource-group rg-demo-arm \
-    --template-file storage-account-template.json \
-    --parameters @parameters.json
+    --template-file storage-account-template.json
 
 # Desplegar
 az deployment group create \
     --resource-group rg-demo-arm \
-    --template-file storage-account-template.json \
-    --parameters @parameters.json
+    --template-file storage-account-template.json
 ```
 
 ## Estructura de un ARM Template
@@ -55,10 +52,10 @@ az deployment group create \
 
 ## Conceptos clave
 
-**Parameters**: Valores que se pueden personalizar
-- storageAccountName: Nombre único
-- location: Región de Azure
-- sku: Tipo de replicación
+**Parameters**: Valores configurables con valores por defecto
+- storageAccountName: Se genera automáticamente usando `uniqueString()`
+- location: Usa la ubicación del Resource Group por defecto
+- sku: Standard_LRS por defecto
 
 **Variables**: Valores calculados dentro del template
 
@@ -84,8 +81,7 @@ az deployment group show \
 # What-If (ver cambios sin aplicar)
 az deployment group what-if \
     --resource-group rg-demo-arm \
-    --template-file storage-account-template.json \
-    --parameters @parameters.json
+    --template-file storage-account-template.json
 
 # Exportar template de recursos existentes
 az group export \
@@ -108,6 +104,6 @@ az group delete --name rg-demo-arm --yes
 
 ## Importante
 
-- El nombre de la storage account debe ser único globalmente
-- Modifica el nombre en `parameters.json` antes de desplegar
+- El template es autosuficiente: no necesita archivo de parámetros
+- El nombre de la storage account se genera automáticamente
 - Recuerda eliminar recursos después de la demostración

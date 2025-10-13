@@ -10,8 +10,7 @@ az group create --name $RG --location $LOCATION
 echo "Desplegando Bicep..."
 az deployment group create \
   --resource-group $RG \
-  --template-file storage-account.bicep \
-  --parameters storage-account.bicepparam
+  --template-file storage-account.bicep
 
 echo ""
 echo "Hecho! Ver recursos:"

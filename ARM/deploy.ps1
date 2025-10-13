@@ -3,8 +3,8 @@
 # Variables
 $resourceGroupName = "rg-demo-arm"
 $location = "westeurope"
-$templateFile = "storage-account-template.json"
-$parametersFile = "parameters.json"
+$templateFile = "template.json"
+$deploymentName = "demo-storage-deployment-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
 
 # Mostrar información
 Write-Host "=== Despliegue de ARM Template ==="
@@ -12,14 +12,9 @@ Write-Host "Resource Group: $resourceGroupName"
 Write-Host "Ubicación: $location"
 Write-Host ""
 
-# Verificar que los archivos existen
+# Verificar que el archivo existe
 if (-not (Test-Path $templateFile)) {
     Write-Host "Error: No se encuentra el archivo $templateFile"
-    exit 1
-}
-
-if (-not (Test-Path $parametersFile)) {
-    Write-Host "Error: No se encuentra el archivo $parametersFile"
     exit 1
 }
 
@@ -34,8 +29,7 @@ Write-Host ""
 Write-Host "Validando ARM Template..."
 az deployment group validate `
     --resource-group $resourceGroupName `
-    --template-file $templateFile `
-    --parameters $parametersFile
+    --template-file $templateFile
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Validación exitosa"
@@ -50,8 +44,7 @@ Write-Host "Desplegando ARM Template..."
 az deployment group create `
     --resource-group $resourceGroupName `
     --template-file $templateFile `
-    --parameters $parametersFile `
-    --name "demo-storage-deployment-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+    --name $deploymentName
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host ""
@@ -62,7 +55,7 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "Obteniendo outputs del despliegue..."
     az deployment group show `
         --resource-group $resourceGroupName `
-        --name "demo-storage-deployment-$(Get-Date -Format 'yyyyMMdd-HHmmss')" `
+        --name $deploymentName `
         --query properties.outputs
 } else {
     Write-Host ""
