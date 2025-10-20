@@ -47,7 +47,6 @@ const server = http.createServer((req, res) => {
         <div class="container">
             <h1>Hola Mundo!</h1>
             <p>Estoy ejecutándome en un contenedor.</p>
-            <p>Puerto: ${port}</p>
         </div>
     </body>
     </html>
