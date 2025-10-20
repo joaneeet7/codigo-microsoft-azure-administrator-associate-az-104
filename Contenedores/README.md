@@ -48,7 +48,7 @@ docker rmi hola-mundo
 docker run -d -p 3000:3000 --name mi-app hola-mundo
 
 # Ver logs
-docker logs mi-app
+docker logs hola-mundo
 
 # Subir imagen a Docker Hub (repositorio público)
 docker tag hola-mundo tu-usuario/hola-mundo:latest
