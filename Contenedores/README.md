@@ -49,4 +49,18 @@ docker run -d -p 3000:3000 --name mi-app hola-mundo
 
 # Ver logs
 docker logs mi-app
+
+# Subir imagen a Docker Hub (repositorio público)
+docker tag hola-mundo tu-usuario/hola-mundo:latest
+docker push tu-usuario/hola-mundo:latest
+
+# Subir a repositorio privado (ejemplo: Azure Container Registry)
+# az acr login --name tu-registry
+# docker tag hola-mundo tu-registry.azurecr.io/hola-mundo:latest
+# docker push tu-registry.azurecr.io/hola-mundo:latest
+
+# Subir a GitHub Container Registry
+# echo $GITHUB_TOKEN | docker login ghcr.io -u tu-usuario --password-stdin
+# docker tag hola-mundo ghcr.io/tu-usuario/hola-mundo:latest
+# docker push ghcr.io/tu-usuario/hola-mundo:latest
 ```
