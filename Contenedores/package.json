@@ -1,0 +1,13 @@
+{
+  "name": "hola-mundo-docker",
+  "version": "1.0.0",
+  "description": "Aplicación simple de Hola Mundo para Docker",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {},
+  "keywords": ["docker", "nodejs", "hola-mundo"],
+  "author": "Joan Amengual",
+  "license": "MIT"
+}
